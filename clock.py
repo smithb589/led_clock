@@ -26,8 +26,11 @@ LED_BRIGHTNESS = math.floor(255 / 2)     # Set to 0 for darkest and 255 for brig
 LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
 
-TIME_BLUE_COLOR = Color(125, 253, 254)
-TIME_ORANGE_COLOR = Color(223, 116, 12)
+#TIME_BLUE_COLOR = Color(125, 253, 254)
+#TIME_ORANGE_COLOR = Color(255, 140, 0)
+
+TIME_EVEN_COLOR = Color(255, 0, 0)
+TIME_ODD_COLOR = Color(0, 0, 255)
 
 class ClockTime:
     # hour in [0,23] and minute in [0, 59]
@@ -56,10 +59,10 @@ def convertHourLEDTo12Hour(hourLED):
 
 def updateStripToTime(strip, currentTime):
     # Blue on even hours, orange on odd hours
-    minuteFillColor = TIME_BLUE_COLOR
-    minuteDrainColor = TIME_ORANGE_COLOR
-    hourFillColor = TIME_BLUE_COLOR
-    hourDrainColor = TIME_ORANGE_COLOR
+    minuteFillColor = TIME_EVEN_COLOR
+    minuteDrainColor = TIME_ODD_COLOR
+    hourFillColor = TIME_EVEN_COLOR
+    hourDrainColor = TIME_ODD_COLOR
 
     # Swap for odd hours
     if (currentTime.hour % 2) == 1:
@@ -79,7 +82,7 @@ def updateStripToTime(strip, currentTime):
         else:
             strip.setPixelColor(led, minuteDrainColor)
         minute += 1
-    
+
     for led in range(HOUR_RANGE_BEGIN, HOUR_RANGE_END):
         hourForLED = convertHourLEDTo12Hour(led)
         if hourForLED < (currentTime.hour % 12):
@@ -105,7 +108,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-t', '--test', action='store_true', help='run with time test loop')
     args = parser.parse_args()
- 
+
     # Create NeoPixel object with appropriate configuration.
     strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
     # Intialize the library (must be called once before other functions).
@@ -125,5 +128,5 @@ if __name__ == '__main__':
                 updateStripForActualTime(strip)
                 # Sleep tenth of a second.
                 time.sleep(0.1)
-    except KeyboardInterrupt:
+    finally:
         setAllPixels(strip, Color(0,0,0))
