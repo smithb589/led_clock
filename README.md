@@ -1,6 +1,6 @@
 # led_clock
 
-Simple LED clock using a Raspberry pi and 96 Neopixel LEDs (60 for minutes + 36 for hours).
+Simple LED clock using a Raspberry pi and 96 Neopixel LEDs (60 for minutes + 36 for hours). Note that the diagram calls for a 6A fuse, but that can be reduced to 4A if using 50% LED brightness.
 
 Built using the rpi_ws281x and rpi-ws281x-python libraries.
 https://github.com/jgarff/rpi_ws281x
